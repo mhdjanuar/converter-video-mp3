@@ -48,6 +48,15 @@
     padding-left: 20px;
 }
 
+.thumbnail-title {
+    width: 400px;
+}
+
+.thumbnail-image {
+    width: 200px;
+    height: 130px;
+}
+
 @media only screen and (min-width: 480px) and (max-width: 620px)  {
     .container-text-input {
         width: 450px;
@@ -69,6 +78,15 @@
         flex-direction: column;
         align-items: center;
         padding-top: 10;
+    }
+
+    .thumbnail-title {
+        width: 100%;
+    }
+
+    .thumbnail-image {
+        width: 100%;
+        height: auto;
     }
   }  
 

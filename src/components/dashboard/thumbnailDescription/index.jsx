@@ -5,7 +5,7 @@ const ThumbnailDescription = (props) => {
   return (
     <>
       <div className="container-tumbnail-desc">
-          <h3 style={{width: 400}}>{props.title}</h3>
+          <h3 className="thumbnail-title">{props.title}</h3>
           <p>{props.author}</p>
       </div>
     </>

@@ -5,7 +5,7 @@ const Thumbnail = (props) => {
   return (
     <>
       <div className="container-thumbnail">
-        <img style={{width: '200px', height: '130px'}} src={props.src} />
+        <img className="thumbnail-image" src={props.src} />
         {props.children}
       </div>
     </>
