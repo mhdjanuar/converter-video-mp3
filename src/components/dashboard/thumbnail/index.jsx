@@ -4,7 +4,10 @@ import '../index.css';
 const Thumbnail = (props) => {
   return (
     <>
-      <img style={{width: '200px', height: '130px'}} src={props.src} />
+      <div className="container-thumbnail">
+        <img style={{width: '200px', height: '130px'}} src={props.src} />
+        {props.children}
+      </div>
     </>
   );
 }

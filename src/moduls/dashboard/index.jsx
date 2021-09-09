@@ -12,6 +12,8 @@ const Dashboard = () => {
   const [isEmptyData, setIsEmptyData] = useState(true);
   const [error, setError] = useState('');
 
+  console.log(error)
+
   const getInfoVideo = async () => {
     try {
       const API = `${API_URL}/video-info?url=${urlText}`;
@@ -76,13 +78,12 @@ const Dashboard = () => {
             {isLoading && <p>Loading...</p>}
 
             {!isEmptyData && (
-               <div style={{display: 'flex', paddingTop: 10}}>
-                <Thumbnail src={videoInfo.thumbnail}/>
-                <ThumbnailDescription 
-                  title={videoInfo.title} 
-                  author={videoInfo.author}
-                />
-              </div>
+                <Thumbnail src={videoInfo.thumbnail}>
+                    <ThumbnailDescription 
+                      title={videoInfo.title} 
+                      author={videoInfo.author}
+                    />
+                </Thumbnail>
             )}
           </div>
         </div>
