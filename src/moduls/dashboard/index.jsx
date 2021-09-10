@@ -1,9 +1,12 @@
-import { useState }  from "react";
+import { useState, useEffect }  from "react";
 import { TextInput, Button, Thumbnail, ThumbnailDescription } from "../../components/dashboard";
 import { API_URL, AUTH_USERNAME, AUTH_PASS } from "../../global";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 const Dashboard = () => {
+
+  const socket = io("http://free-downloader.herokuapp.com");
 
   const [urlText, setUrlText] = useState('');
 
@@ -12,7 +15,24 @@ const Dashboard = () => {
   const [isEmptyData, setIsEmptyData] = useState(true);
   const [error, setError] = useState('');
 
-  console.log(error)
+  useEffect(() => {
+    console.log('mulai')
+
+    //client-side
+    socket.on("connect", () => {
+      console.log(socket.id); // true
+    });
+
+    socket.on("statusCheckDownload", (response) => {
+      console.log(response);
+    });
+
+    return () => {
+      socket.on("disconnect", (socket) => {
+        console.log(socket.id); // undefined
+      });
+    }
+  })
 
   const getInfoVideo = async () => {
     try {
