@@ -4,27 +4,31 @@ import { API_URL, AUTH_USERNAME, AUTH_PASS } from "../../global";
 import axios from "axios";
 import { io } from "socket.io-client";
 
+const socket = io("http://free-downloader.herokuapp.com");
+
 const Dashboard = () => {
-
-  const socket = io("http://free-downloader.herokuapp.com");
-
   const [urlText, setUrlText] = useState('');
 
   const [videoInfo, setVideoInfo] = useState({});
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoadingGetInfo, setIsloadingGetInfo] = useState(false);
+  const [isLoadingCheckVideo, setIsloadingCheckVideo] = useState(false);
   const [isEmptyData, setIsEmptyData] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    console.log('mulai')
+  const [socketId, setSocketId] = useState('');
 
-    //client-side
+  useEffect(() => {    
     socket.on("connect", () => {
-      console.log(socket.id); // true
+      const { id } = socket;
+      console.log(id);
+      setSocketId(id)
     });
 
     socket.on("statusCheckDownload", (response) => {
-      console.log(response);
+      if (!response.isLoading) {
+        setIsloadingCheckVideo(false)
+        setIsEmptyData(false)
+      }
     });
 
     return () => {
@@ -32,13 +36,13 @@ const Dashboard = () => {
         console.log(socket.id); // undefined
       });
     }
-  })
+  }, [])
 
   const getInfoVideo = async () => {
     try {
       const API = `${API_URL}/video-info?url=${urlText}`;
       setIsEmptyData(true)
-      setIsloading(true)
+      setIsloadingGetInfo(true)
 
       const response = await axios.get(API, {
         // Axios looks for the `auth` option, and, if it is set, formats a
@@ -51,15 +55,43 @@ const Dashboard = () => {
 
       const res = response.data;
       if (res.success) {
-        setIsloading(false)
-        setVideoInfo(res.data)
-        setIsEmptyData(false)
+        const { data } = res;
+        setIsloadingGetInfo(false)
+        setVideoInfo(data)
+        checkingVideo(data);
       }
     } catch (error) {
-      setIsloading(false)
+      setIsloadingGetInfo(false)
       setError(error)
     }
   }
+
+  const checkingVideo = async (data) => {
+    try {
+      const API = `${API_URL}/check-download?url=https://www.youtube.com/watch?v=jeccjxIgBJ0`;
+      const { title } = data;
+      const body = {
+        title,
+        clientId: `${socketId}`
+      }
+
+      const response = await axios.post(API, body, {
+        // Axios looks for the `auth` option, and, if it is set, formats a
+        // basic auth header for you automatically.
+        auth: {
+          username: AUTH_USERNAME,
+          password: AUTH_PASS
+        }
+      });
+
+      const res = response.data;
+      if (res.success) {
+        setIsloadingCheckVideo(true)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  } 
 
   const downloader = async () => {
     const API = `https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3`;
@@ -99,7 +131,9 @@ const Dashboard = () => {
             </div>
            
 
-            {isLoading && <p>Loading...</p>}
+            {isLoadingGetInfo && <p>initialize...</p>}
+
+            {isLoadingCheckVideo && <p>checking video...</p>}
 
             {!isEmptyData && (
                 <Thumbnail src={videoInfo.thumbnail}>
