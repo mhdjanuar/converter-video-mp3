@@ -10,6 +10,7 @@ const TextInput = (props) => {
               autoFocus
               style={props.style}
               onChange={props.onChange}
+              value={props.value}
               className="text-input"
           />
 

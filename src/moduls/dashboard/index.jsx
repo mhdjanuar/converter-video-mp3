@@ -131,6 +131,26 @@ const Dashboard = () => {
     }
   }
 
+  const deleteFileInfo = () => {
+    if (socketId !== '') {
+      const data = {
+        clientId: socketId,
+        fileName: fileName,
+        message: 'deleted from fe'
+      }
+  
+      setUrlText('')
+      setVideoInfo({})
+      setIsloadingGetInfo(false)
+      setIsloadingCheckVideo(false)
+      setisLoadingDownload(false)
+      setIsEmptyData(true)
+      setFileName('')
+  
+      socket.emit("deletedFile", data);
+    }
+  }
+
 
   return (
     <div>
@@ -138,7 +158,7 @@ const Dashboard = () => {
           <div style={{backgroundColor: '#f4f4f4', padding: '20px', marginTop: '20px'}}>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
               <p>Please insert a valid video URL</p>
-              <TextInput onChange={(e) => setUrlText(e.target.value)}>
+              <TextInput value={urlText} onChange={(e) => setUrlText(e.target.value)}>
                 <Button name="Convert" onClick={() => getInfoVideo()}/>
               </TextInput>
             </div>
@@ -156,7 +176,10 @@ const Dashboard = () => {
                       title={videoInfo.title}
                       author={videoInfo.author}
                     />
-                    <Button name="Download" onClick={() => downloader()}/>
+                    <div style={{display: 'flex'}}>
+                      <Button name="Download" onClick={() => downloader()}/>
+                      <Button style={{marginLeft: 10}} name="Next" onClick={() => deleteFileInfo()}/>
+                    </div>
                 </Thumbnail>
             )}
           </div>

@@ -3,7 +3,7 @@ import '../index.css';
 
 const Button = (props) => {
   return (
-    <div className="button" onClick={props.onClick}>
+    <div style={props.style} className="button" onClick={props.onClick}>
       <p style={{color: 'white'}}>{props.name}</p>
     </div>
   );
