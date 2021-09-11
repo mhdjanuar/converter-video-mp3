@@ -6,7 +6,9 @@ const Thumbnail = (props) => {
     <>
       <div className="container-thumbnail">
         <img className="thumbnail-image" src={props.src} />
-        {props.children}
+        <div style={{paddingLeft: '20px'}}>
+          {props.children}
+        </div>
       </div>
     </>
   );
