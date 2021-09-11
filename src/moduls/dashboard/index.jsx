@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [videoInfo, setVideoInfo] = useState({});
   const [isLoadingGetInfo, setIsloadingGetInfo] = useState(false);
   const [isLoadingCheckVideo, setIsloadingCheckVideo] = useState(false);
+  const [isLoadingDownload, setisLoadingDownload] = useState(false);
   const [isEmptyData, setIsEmptyData] = useState(true);
   const [fileName, setFileName] = useState('');
   const [error, setError] = useState('');
@@ -73,7 +74,6 @@ const Dashboard = () => {
       const API = `${API_URL}/check-download?url=${urlText}`;
       const { title } = data;
       const body = {
-        title,
         clientId: `${socketId}`
       }
 
@@ -89,7 +89,7 @@ const Dashboard = () => {
       const res = response.data;
       if (res.success) {
         setIsloadingCheckVideo(true)
-        setFileName(res.data.fileName)
+        setFileName(res.data.filename)
       }
     } catch (error) {
       console.log(error)
@@ -98,25 +98,36 @@ const Dashboard = () => {
   } 
 
   const downloader = async () => {
-    const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
+    try{
+      const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
+      setisLoadingDownload(true)
 
-    const response = await axios.get(API, {
-      // Axios looks for the `auth` option, and, if it is set, formats a
-      // basic auth header for you automatically.
-      auth: {
-        username: AUTH_USERNAME,
-        password: AUTH_PASS
-      },
-      responseType: 'blob',
-    });
+      const response = await axios.get(API, {
+        // Axios looks for the `auth` option, and, if it is set, formats a
+        // basic auth header for you automatically.
+        auth: {
+          username: AUTH_USERNAME,
+          password: AUTH_PASS
+        },
+        responseType: 'blob',
+      });
 
-    const url  = window.URL.createObjectURL(new Blob([response.data]))
+      console.log(response.statusText);
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${videoInfo.title}.mp3`); //or any other extension
-    document.body.appendChild(link);
-    link.click();
+      if (response.statusText == 'OK') {
+        const url  = window.URL.createObjectURL(new Blob([response.data]))
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${videoInfo.title} BY YUJA.mp3`); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+        setisLoadingDownload(false)
+      }
+    } catch(e){
+      console.log(e)
+      setisLoadingDownload(false)
+    }
   }
 
 
@@ -135,6 +146,8 @@ const Dashboard = () => {
             {isLoadingGetInfo && <p>initialize...</p>}
 
             {isLoadingCheckVideo && <p>checking video...</p>}
+
+            {isLoadingDownload && <p>Wait for dowmload...</p>}
 
             {!isEmptyData && (
                 <Thumbnail src={videoInfo.thumbnail}>
