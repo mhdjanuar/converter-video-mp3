@@ -26,6 +26,7 @@ const Dashboard = () => {
       setSocketId(id)
     });
 
+
     socket.on("statusCheckDownload", (response) => {
       if (!response.isLoading) {
         setIsloadingCheckVideo(false)
@@ -38,7 +39,7 @@ const Dashboard = () => {
         console.log(socket.id); // undefined
       });
     }
-  })
+  }, [])
 
   const getInfoVideo = async () => {
     try {
