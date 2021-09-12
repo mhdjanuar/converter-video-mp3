@@ -147,7 +147,7 @@ const Dashboard = () => {
       setIsEmptyData(true)
       setFileName('')
   
-      socket.emit("deletedFile", data);
+      socket.emit("deleteFile", data);
     }
   }
 
