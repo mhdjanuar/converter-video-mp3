@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [isLoadingDownload, setisLoadingDownload] = useState(false);
   const [isEmptyData, setIsEmptyData] = useState(true);
   const [fileName, setFileName] = useState('');
+  const [progressDownload, setprogressDownload] = useState(0);
   const [error, setError] = useState('');
 
   const [socketId, setSocketId] = useState('');
@@ -100,22 +101,29 @@ const Dashboard = () => {
 
   const downloader = async () => {
     try{
-      const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
+      // const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
+      const API = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3';
       setisLoadingDownload(true)
 
       const response = await axios.get(API, {
         // Axios looks for the `auth` option, and, if it is set, formats a
         // basic auth header for you automatically.
-        auth: {
-          username: AUTH_USERNAME,
-          password: AUTH_PASS
+        // auth: {
+        //   username: AUTH_USERNAME,
+        //   password: AUTH_PASS
+        // },
+        onDownloadProgress: (progressEvent) => {
+          // Do whatever you want with the native progress event
+          let percentCompleted = Math.floor(progressEvent.loaded / progressEvent.total * 100)
+          console.log(percentCompleted + '%');
+          setprogressDownload(percentCompleted);
         },
         responseType: 'blob',
       });
 
-      console.log(response.statusText);
+      console.log(response);
 
-      if (response.statusText == 'OK') {
+      if (response.status == 200) {
         const url  = window.URL.createObjectURL(new Blob([response.data]))
 
         const link = document.createElement('a');
@@ -146,6 +154,7 @@ const Dashboard = () => {
       setisLoadingDownload(false)
       setIsEmptyData(true)
       setFileName('')
+      setprogressDownload(0);
   
       socket.emit("deleteFile", data);
     }
@@ -168,7 +177,7 @@ const Dashboard = () => {
 
             {isLoadingCheckVideo && <p>checking video...</p>}
 
-            {isLoadingDownload && <p>Wait for dowmload...</p>}
+            {isLoadingDownload && <p>Wait for dowmload... {progressDownload}%</p>}
 
             {!isEmptyData && (
                 <Thumbnail src={videoInfo.thumbnail}>
