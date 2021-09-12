@@ -57,6 +57,14 @@
     height: 130px;
 }
 
+.container-progress-bar {
+    background: #333;
+    border-radius: 13px;
+    height: 20px;
+    width: 300px;
+    padding: 3px;
+}
+
 @media only screen and (min-width: 480px) and (max-width: 620px)  {
     .container-text-input {
         width: 450px;

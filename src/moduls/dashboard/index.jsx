@@ -1,5 +1,5 @@
 import { useState, useEffect }  from "react";
-import { TextInput, Button, Thumbnail, ThumbnailDescription } from "../../components/dashboard";
+import { TextInput, Button, Thumbnail, ThumbnailDescription, ProgressBar } from "../../components/dashboard";
 import { API_URL, AUTH_USERNAME, AUTH_PASS } from "../../global";
 import axios from "axios";
 import { io } from "socket.io-client";
@@ -102,6 +102,7 @@ const Dashboard = () => {
   const downloader = async () => {
     try{
       const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
+      // const API = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3';
       setisLoadingDownload(true)
 
       const response = await axios.get(API, {
@@ -118,6 +119,8 @@ const Dashboard = () => {
         },
         responseType: 'blob',
       });
+
+      console.log(response)
 
       if (response.status == 200) {
         const url  = window.URL.createObjectURL(new Blob([response.data]))
@@ -173,7 +176,13 @@ const Dashboard = () => {
 
             {isLoadingCheckVideo && <p>checking video...</p>}
 
-            {isLoadingDownload && <p>Wait for dowmload... {progressDownload}%</p>}
+            {isLoadingDownload && (
+              <div>
+                <p>Wait for dowmload</p>
+                <p>{progressDownload}%</p>
+                <ProgressBar currentProgress={`${progressDownload}%`}/>
+              </div>
+            )}
 
             {!isEmptyData && (
                 <Thumbnail src={videoInfo.thumbnail}>
