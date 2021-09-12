@@ -101,27 +101,23 @@ const Dashboard = () => {
 
   const downloader = async () => {
     try{
-      // const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
-      const API = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3';
+      const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
       setisLoadingDownload(true)
 
       const response = await axios.get(API, {
         // Axios looks for the `auth` option, and, if it is set, formats a
         // basic auth header for you automatically.
-        // auth: {
-        //   username: AUTH_USERNAME,
-        //   password: AUTH_PASS
-        // },
+        auth: {
+          username: AUTH_USERNAME,
+          password: AUTH_PASS
+        },
         onDownloadProgress: (progressEvent) => {
           // Do whatever you want with the native progress event
           let percentCompleted = Math.floor(progressEvent.loaded / progressEvent.total * 100)
-          console.log(percentCompleted + '%');
           setprogressDownload(percentCompleted);
         },
         responseType: 'blob',
       });
-
-      console.log(response);
 
       if (response.status == 200) {
         const url  = window.URL.createObjectURL(new Blob([response.data]))
