@@ -161,7 +161,7 @@ const Dashboard = () => {
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <div style={{backgroundColor: '#f4f4f4', padding: '20px', marginTop: '20px'}}>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <p>Please insert a valid video URL</p>
+              <h3>Please insert a valid video URL</h3>
               <TextInput value={urlText} onChange={(e) => setUrlText(e.target.value)}>
                 <Button 
                   name={isEmptyData ? 'Convert' : 'Next'}
