@@ -74,10 +74,22 @@
     justify-content: center;
 }
 
-@media only screen and (min-width: 480px) and (max-width: 620px)  {
+@media only screen and (min-width: 480px) and (max-width: 680px)  {
     .container-text-input {
         width: 450px;
     }
+
+    .container-thumbnail {
+        display: flex; 
+        flex-direction: column;
+        padding-top: 10;
+    }
+
+    .thumbnail-image {
+        width: 100%;
+        height: auto;
+    }
+
  }
 
 @media only screen and (max-width: 480px) {
@@ -93,7 +105,6 @@
     .container-thumbnail {
         display: flex; 
         flex-direction: column;
-        align-items: center;
         padding-top: 10;
     }
 

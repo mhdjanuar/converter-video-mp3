@@ -101,7 +101,7 @@ const Dashboard = () => {
   const downloader = async () => {
     try{
       const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
-      // const API = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3';
+      //const API = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3';  
       setisLoadingDownload(true)
 
       const response = await axios.get(API, {
@@ -118,8 +118,6 @@ const Dashboard = () => {
         },
         responseType: 'arraybuffer',
       });
-
-      console.log(response)
 
       if (response.status == 200) {
         const url  = window.URL.createObjectURL(new Blob([response.data]))
@@ -158,7 +156,6 @@ const Dashboard = () => {
     }
   }
 
-
   return (
     <div>
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -166,7 +163,10 @@ const Dashboard = () => {
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
               <p>Please insert a valid video URL</p>
               <TextInput value={urlText} onChange={(e) => setUrlText(e.target.value)}>
-                <Button name="Convert" onClick={() => getInfoVideo()}/>
+                <Button 
+                  name={isEmptyData ? 'Convert' : 'Next'}
+                  onClick={() => isEmptyData ? getInfoVideo() : deleteFileInfo()}
+                />
               </TextInput>
             </div>
            
@@ -188,10 +188,7 @@ const Dashboard = () => {
                       title={videoInfo.title}
                       author={videoInfo.author}
                     />
-                    <div style={{display: 'flex'}}>
-                      <Button name="Download" onClick={() => downloader()}/>
-                      <Button style={{marginLeft: 10}} name="Next" onClick={() => deleteFileInfo()}/>
-                    </div>
+                    <Button name="Download" onClick={() => downloader()}/>
                 </Thumbnail>
             )}
           </div>
