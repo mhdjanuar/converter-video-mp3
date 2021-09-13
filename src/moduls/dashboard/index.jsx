@@ -116,7 +116,7 @@ const Dashboard = () => {
           let percentCompleted = Math.floor(progressEvent.loaded / progressEvent.total * 100)
           setprogressDownload(percentCompleted);
         },
-        responseType: 'blob',
+        responseType: 'arraybuffer',
       });
 
       console.log(response)
@@ -177,9 +177,8 @@ const Dashboard = () => {
 
             {isLoadingDownload && (
               <div>
-                <p>Wait for dowmload</p>
-                <p>{progressDownload}%</p>
-                <ProgressBar currentProgress={`${progressDownload}%`}/>
+                <p>Wait for download...</p>
+                <ProgressBar currentProgress={`${progressDownload}`} value={`${progressDownload}%`}/>
               </div>
             )}
 

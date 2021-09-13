@@ -5,7 +5,10 @@ const ProgressBar = (props) => {
   return (
     <>
       <div className="container-progress-bar">
-        <div style={{width: `${props.currentProgress}`, height: 20, backgroundColor: 'orange'}} />
+        <div className="proggres-bar" 
+          style={{width: props.currentProgress <= 10 ? '10%' : `${props.currentProgress}%`}}>
+          <p>{props.value}</p>
+        </div>
       </div>
     </>
   );
