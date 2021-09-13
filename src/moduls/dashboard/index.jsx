@@ -62,7 +62,7 @@ const Dashboard = () => {
         const { data } = res;
         setIsloadingGetInfo(false)
         setVideoInfo(data)
-        checkingVideo(data);
+        checkingVideo();
       }
     } catch (error) {
       console.log(error)
@@ -71,10 +71,9 @@ const Dashboard = () => {
     }
   }
 
-  const checkingVideo = async (data) => {
+  const checkingVideo = async () => {
     try {
       const API = `${API_URL}/check-download?url=${urlText}`;
-      const { title } = data;
       const body = {
         clientId: `${socketId}`
       }
