@@ -102,7 +102,7 @@ const Dashboard = () => {
     }
   } 
 
-  const downloader = async () => {
+  const downloader = async () => {  
     try{
       const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`; 
       setisLoadingDownload(true)
@@ -159,18 +159,35 @@ const Dashboard = () => {
     }
   }
 
+  // const buttonName = () => {
+  //   let name;
+
+  //   if (isEmptyData) {
+  //     name = 'Convert'
+  //   } else if (!isEmptyData && isDownloadDone)
+  // }
+
   return (
     <div>
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <div style={{backgroundColor: '#f4f4f4', padding: '20px', marginTop: '20px'}}>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <h3>Please insert a valid video URL</h3>
-              <TextInput value={urlText} onChange={(e) => setUrlText(e.target.value)}>
-                <Button 
-                  name={isEmptyData ? 'Convert' : 'Next'}
-                  onClick={() => isEmptyData ? getInfoVideo() : deleteFileInfo()}
-                />
-              </TextInput>
+              {!isLoadingDownload ? (
+                isEmptyData && (
+                  <div>
+                    <h3>Please insert a valid video URL</h3>
+                    <TextInput value={urlText} onChange={(e) => setUrlText(e.target.value)}>
+                      <Button 
+                        name={isEmptyData ? 'Convert' : 'Next'}
+                        onClick={() => isEmptyData ? getInfoVideo() : deleteFileInfo()}
+                      />
+                    </TextInput>
+                  </div>
+                )
+              ): (
+                <ProgressBar currentProgress={`${progressDownload}`} value={`${progressDownload}%`}/>
+              )}
+              
             </div>
            
 
@@ -178,12 +195,12 @@ const Dashboard = () => {
 
             {isLoadingCheckVideo && <p>checking video...</p>}
 
-            {isLoadingDownload && (
+            {/* {isLoadingDownload && (
               <div>
                 <p>Wait for download...</p>
                 <ProgressBar currentProgress={`${progressDownload}`} value={`${progressDownload}%`}/>
               </div>
-            )}
+            )} */}
 
             {!isEmptyData && (
                 <Thumbnail src={videoInfo.thumbnail}>
@@ -191,7 +208,10 @@ const Dashboard = () => {
                       title={videoInfo.title}
                       author={videoInfo.author}
                     />
-                    <Button name="Download" onClick={() => downloader()}/>
+                    <div style={{display: 'flex'}}>
+                      <Button name="Download" onClick={() => !isLoadingDownload ? downloader() : alert('bersabar proses download')}/>
+                      {progressDownload >= 100 && <Button style={{marginLeft: 10}} name="Convert Next" onClick={() => deleteFileInfo()}/>}
+                    </div>
                 </Thumbnail>
             )}
           </div>

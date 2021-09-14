@@ -59,16 +59,16 @@
 
 .container-progress-bar {
     background: #333;
-    border-radius: 13px;
-    height: 20px;
-    width: 300px;
+    border-radius: 20px;
+    height: 30px;
+    width: 500px;
     padding: 3px;
 }
 
 .proggres-bar {
-    height: 20px;
+    height: 30px;
     background-color: orange;
-    border-radius: 13px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,6 +115,14 @@
     .thumbnail-image {
         width: 100%;
         height: auto;
+    }
+
+    .container-progress-bar {
+        background: #333;
+        border-radius: 20px;
+        height: 30px;
+        width: 100%;
+        padding: 3px;
     }
   }  
 
