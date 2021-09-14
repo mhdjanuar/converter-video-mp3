@@ -1,12 +1,15 @@
 import { useState, useEffect }  from "react";
 import { TextInput, Button, Thumbnail, ThumbnailDescription, ProgressBar } from "../../components/dashboard";
-import { API_URL, AUTH_USERNAME, AUTH_PASS } from "../../global";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const socket = io("http://free-downloader.herokuapp.com");
+const socket = io(`${process.env.REACT_APP_BASE_URL}`);
 
 const Dashboard = () => {
+  const API_URL = `${process.env.REACT_APP_BASE_URL}/youtube/v1`;
+  const AUTH_USERNAME = process.env.REACT_APP_AUTH_USERNAME;
+  const AUTH_PASS = process.env.REACT_APP_AUTH_PASS;
+
   const [urlText, setUrlText] = useState('');
 
   const [videoInfo, setVideoInfo] = useState({});
@@ -100,8 +103,7 @@ const Dashboard = () => {
 
   const downloader = async () => {
     try{
-      const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`;
-      //const API = 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3';  
+      const API = `${API_URL}/download?clientId=${socketId}&filename=${fileName}`; 
       setisLoadingDownload(true)
 
       const response = await axios.get(API, {
