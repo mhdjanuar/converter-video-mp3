@@ -48,6 +48,7 @@ const Dashboard = () => {
   const getInfoVideo = async () => {
     try {
       const API = `${API_URL}/video-info?url=${urlText}`;
+      console.log(API)
       setIsEmptyData(true)
       setIsloadingGetInfo(true)
 
