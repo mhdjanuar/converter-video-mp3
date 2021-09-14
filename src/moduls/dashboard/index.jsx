@@ -3,7 +3,7 @@ import { TextInput, Button, Thumbnail, ThumbnailDescription, ProgressBar } from 
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const socket = io(`${process.env.REACT_APP_BASE_URL}`);
+// const socket = io(`${process.env.REACT_APP_BASE_URL}`);
 
 const Dashboard = () => {
   const API_URL = `${process.env.REACT_APP_BASE_URL}/youtube/v1`;
@@ -23,31 +23,32 @@ const Dashboard = () => {
 
   const [socketId, setSocketId] = useState('');
 
-  useEffect(() => {    
-    socket.on("connect", () => {
-      const { id } = socket;
-      console.log(id);
-      setSocketId(id)
-    });
+  // useEffect(() => {    
+  //   socket.on("connect", () => {
+  //     const { id } = socket;
+  //     console.log(id);
+  //     setSocketId(id)
+  //   });
 
 
-    socket.on("statusCheckDownload", (response) => {
-      if (!response.isLoading) {
-        setIsloadingCheckVideo(false)
-        setIsEmptyData(false)
-      }
-    });
+  //   socket.on("statusCheckDownload", (response) => {
+  //     if (!response.isLoading) {
+  //       setIsloadingCheckVideo(false)
+  //       setIsEmptyData(false)
+  //     }
+  //   });
 
-    return () => {
-      socket.on("disconnect", (socket) => {
-        console.log(socket.id); // undefined
-      });
-    }
-  }, [])
+  //   return () => {
+  //     socket.on("disconnect", (socket) => {
+  //       console.log(socket.id); // undefined
+  //     });
+  //   }
+  // }, [])
 
   const getInfoVideo = async () => {
     try {
       const API = `${API_URL}/video-info?url=${urlText}`;
+      console.log(API);
       setIsEmptyData(true)
       setIsloadingGetInfo(true)
 
@@ -59,6 +60,7 @@ const Dashboard = () => {
           password: AUTH_PASS
         }
       });
+      console.log(response)
 
       const res = response.data;
       if (res.success) {
@@ -154,7 +156,7 @@ const Dashboard = () => {
       setFileName('')
       setprogressDownload(0);
   
-      socket.emit("deleteFile", data);
+      // socket.emit("deleteFile", data);
     }
   }
 
