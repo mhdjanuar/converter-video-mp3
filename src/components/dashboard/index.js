@@ -4,6 +4,7 @@ import Thumbnail from "./thumbnail";
 import ThumbnailDescription from "./thumbnailDescription";
 import ProgressBar from "./progressBar";
 import Loading from "./loading";
+import Error from "./error";
 
 export {
     TextInput, 
@@ -11,5 +12,6 @@ export {
     Thumbnail,
     ThumbnailDescription,
     ProgressBar,
-    Loading
+    Loading,
+    Error
 }

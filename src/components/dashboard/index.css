@@ -91,12 +91,39 @@
     color: #0087cf;
 }
 
+.container-error {
+    width: 600px;
+    background-color: #feecec;
+    height: auto;
+    padding: 5px; 
+    border: 1px solid #bf2b2b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    color: #bf2b2b;
+}
+
+.link-error {
+    text-decoration: underline;
+}
+
+.link-error:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
 @media only screen and (min-width: 480px) and (max-width: 680px)  {
     .container-text-input {
         width: 450px;
     }
 
     .container-loading {
+        width: 450px;
+    }
+
+    .container-error {
         width: 450px;
     }
 
@@ -124,6 +151,10 @@
     }
 
     .container-loading {
+        width: 300px;
+    }
+
+    .container-error {
         width: 100%;
     }
 

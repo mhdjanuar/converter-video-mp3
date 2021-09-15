@@ -1,5 +1,5 @@
 import { useState, useEffect }  from "react";
-import { TextInput, Button, Thumbnail, ThumbnailDescription, ProgressBar, Loading } from "../../components/dashboard";
+import { TextInput, Button, Thumbnail, ThumbnailDescription, ProgressBar, Loading, Error } from "../../components/dashboard";
 import axios from "axios";
 import { io } from "socket.io-client";
 
@@ -19,7 +19,7 @@ const Dashboard = () => {
   const [isEmptyData, setIsEmptyData] = useState(true);
   const [fileName, setFileName] = useState('');
   const [progressDownload, setprogressDownload] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(false);
 
   const [socketId, setSocketId] = useState('');
 
@@ -63,15 +63,13 @@ const Dashboard = () => {
       const res = response.data;
       if (res.success) {
         const { data } = res;
-        console.log(data)
         setIsloadingGetInfo(false)
         setVideoInfo(data)
         checkingVideo();
       }
     } catch (error) {
-      console.log(error)
       setIsloadingGetInfo(false)
-      setError(error)
+      setError(true)
     }
   }
 
@@ -182,32 +180,45 @@ const Dashboard = () => {
     <div>
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <div style={{backgroundColor: '#f4f4f4', padding: '20px', marginTop: '20px'}}>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              {!isLoadingDownload ? (
-                isEmptyData && (
-                  <div>
-                    <p style={{color: '#0087cf'}}>
-                      Please insert a valid video URL
-                    </p>
-                    <InputWithLoading />
-                  </div>
-                )
-              ): (
-                <ProgressBar currentProgress={`${progressDownload}`} value={`${progressDownload}%`}/>
-              )}
-            </div>
+            {!error ? (
+              <div>
+                {/* Form Input and Progress Bar */}
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                    {!isLoadingDownload ? (
+                      isEmptyData && (
+                        <div>
+                          <p style={{color: '#0087cf'}}>
+                            Please insert a valid video URL
+                          </p>
+                          <InputWithLoading />
+                        </div>
+                      )
+                    ): (
+                      <ProgressBar currentProgress={`${progressDownload}`} value={`${progressDownload}%`}/>
+                    )}
+                </div>
+                
+                {/* Thumbnail */}
+                {!isEmptyData && (
+                  <Thumbnail src={videoInfo.thumbnail}>
+                      <ThumbnailDescription 
+                        title={videoInfo.title}
+                        author={videoInfo.duration}
+                      />
+                      <div style={{display: 'flex'}}>
+                        <Button name="Download" onClick={() => !isLoadingDownload ? downloader() : alert('bersabar proses download')}/>
+                        {progressDownload >= 100 && <Button style={{marginLeft: 10}} name="Convert Next" onClick={() => deleteFileInfo()}/>}
+                      </div>
+                  </Thumbnail>
+                )}
 
-            {!isEmptyData && (
-                <Thumbnail src={videoInfo.thumbnail}>
-                    <ThumbnailDescription 
-                      title={videoInfo.title}
-                      author={videoInfo.duration}
-                    />
-                    <div style={{display: 'flex'}}>
-                      <Button name="Download" onClick={() => !isLoadingDownload ? downloader() : alert('bersabar proses download')}/>
-                      {progressDownload >= 100 && <Button style={{marginLeft: 10}} name="Convert Next" onClick={() => deleteFileInfo()}/>}
-                    </div>
-                </Thumbnail>
+              </div>
+            ) : (
+              // Error
+              <Error onClick={() => {
+                setError(false)
+                setUrlText('')
+              }}/>
             )}
           </div>
         </div>
