@@ -1,5 +1,5 @@
 import { useState, useEffect }  from "react";
-import { TextInput, Button, Thumbnail, ThumbnailDescription, ProgressBar } from "../../components/dashboard";
+import { TextInput, Button, Thumbnail, ThumbnailDescription, ProgressBar, Loading } from "../../components/dashboard";
 import axios from "axios";
 import { io } from "socket.io-client";
 
@@ -81,6 +81,7 @@ const Dashboard = () => {
       const body = {
         clientId: `${socketId}`
       }
+      setIsloadingCheckVideo(true)
 
       const response = await axios.post(API, body, {
         // Axios looks for the `auth` option, and, if it is set, formats a
@@ -159,13 +160,23 @@ const Dashboard = () => {
     }
   }
 
-  // const buttonName = () => {
-  //   let name;
-
-  //   if (isEmptyData) {
-  //     name = 'Convert'
-  //   } else if (!isEmptyData && isDownloadDone)
-  // }
+  const InputWithLoading = () => {
+    if (!isLoadingGetInfo && !isLoadingCheckVideo) {
+      return (
+        <TextInput value={urlText} onChange={(e) => setUrlText(e.target.value)}>
+              <Button 
+                style={{width: '20%'}}
+                name={isEmptyData ? 'Convert' : 'Next'}
+                onClick={() => isEmptyData ? getInfoVideo() : deleteFileInfo()}
+              />
+         </TextInput>
+      )
+    } else if (isLoadingGetInfo) {
+      return <Loading name="initialize..." />
+    } else if (isLoadingCheckVideo) {
+      return <Loading name="checking video" />
+    }
+  }
 
   return (
     <div>
@@ -175,32 +186,16 @@ const Dashboard = () => {
               {!isLoadingDownload ? (
                 isEmptyData && (
                   <div>
-                    <h3>Please insert a valid video URL</h3>
-                    <TextInput value={urlText} onChange={(e) => setUrlText(e.target.value)}>
-                      <Button 
-                        name={isEmptyData ? 'Convert' : 'Next'}
-                        onClick={() => isEmptyData ? getInfoVideo() : deleteFileInfo()}
-                      />
-                    </TextInput>
+                    <p style={{color: '#0087cf'}}>
+                      Please insert a valid video URL
+                    </p>
+                    <InputWithLoading />
                   </div>
                 )
               ): (
                 <ProgressBar currentProgress={`${progressDownload}`} value={`${progressDownload}%`}/>
               )}
-              
             </div>
-           
-
-            {isLoadingGetInfo && <p>initialize...</p>}
-
-            {isLoadingCheckVideo && <p>checking video...</p>}
-
-            {/* {isLoadingDownload && (
-              <div>
-                <p>Wait for download...</p>
-                <ProgressBar currentProgress={`${progressDownload}`} value={`${progressDownload}%`}/>
-              </div>
-            )} */}
 
             {!isEmptyData && (
                 <Thumbnail src={videoInfo.thumbnail}>
