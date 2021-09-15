@@ -57,6 +57,7 @@
 .thumbnail-image {
     width: 200px;
     height: 130px;
+    padding: 20px;
 }
 
 .container-progress-bar {
@@ -105,9 +106,14 @@
         padding-top: 10;
     }
 
+    .container-tumbnail-desc {
+        padding-left: 0px;
+    }
+
     .thumbnail-image {
         width: 100%;
         height: auto;
+        padding: 0px;
     }
 
  }
@@ -132,6 +138,10 @@
         padding-top: 10;
     }
 
+    .container-tumbnail-desc {
+        padding-left: 0px;
+    }
+
     .thumbnail-title {
         width: 100%;
     }
@@ -139,6 +149,7 @@
     .thumbnail-image {
         width: 100%;
         height: auto;
+        padding: 0px;
     }
 
     .container-progress-bar {

@@ -48,7 +48,6 @@ const Dashboard = () => {
   const getInfoVideo = async () => {
     try {
       const API = `${API_URL}/video-info?url=${urlText}`;
-      console.log(API)
       setIsEmptyData(true)
       setIsloadingGetInfo(true)
 
@@ -64,6 +63,7 @@ const Dashboard = () => {
       const res = response.data;
       if (res.success) {
         const { data } = res;
+        console.log(data)
         setIsloadingGetInfo(false)
         setVideoInfo(data)
         checkingVideo();
@@ -201,7 +201,7 @@ const Dashboard = () => {
                 <Thumbnail src={videoInfo.thumbnail}>
                     <ThumbnailDescription 
                       title={videoInfo.title}
-                      author={videoInfo.author}
+                      author={videoInfo.duration}
                     />
                     <div style={{display: 'flex'}}>
                       <Button name="Download" onClick={() => !isLoadingDownload ? downloader() : alert('bersabar proses download')}/>
